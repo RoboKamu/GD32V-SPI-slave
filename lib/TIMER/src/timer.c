@@ -37,9 +37,9 @@ static void timer_config(void){
 
     // deinit current TIMER1
     timer_deinit(TIMER1);
-    // inintialize TIMER2 with parameters struct 
+    // inintialize TIMER1 with parameters struct 
     timer_struct_para_init(&timer_initpara);
-    // TIMER2 parameter struct configuation
+    // TIMER1 parameter struct configuation
     timer_initpara.prescaler            = 95;   // each step 1us 
     timer_initpara.alignedmode          = TIMER_COUNTER_EDGE;
     timer_initpara.counterdirection     = TIMER_COUNTER_UP;
@@ -48,11 +48,10 @@ static void timer_config(void){
     timer_initpara.repetitioncounter    = 0;
     timer_init(TIMER1, &timer_initpara);
 
-    // enable interrupts for TIMER2 
+    // enable interrupts for TIMER1
     timer_interrupt_enable(TIMER1, TIMER_INT_UP);
     
     timer_enable(TIMER1);
-
 }
 
 /*!
