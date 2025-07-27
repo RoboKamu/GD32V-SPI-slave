@@ -1,0 +1,631 @@
+GAS LISTING /tmp/ccf9YW4S.s 			page 1
+
+
+   1              		.file	"gd32vf103_it.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.add_start_flag,"ax",@progbits
+  10              		.align	1
+  11              		.globl	add_start_flag
+  13              	add_start_flag:
+  14              	.LFB2:
+  15              		.file 1 "lib/INTERRUPT/src/gd32vf103_it.c"
+   1:lib/INTERRUPT/src/gd32vf103_it.c **** #include "gd32vf103_it.h"
+   2:lib/INTERRUPT/src/gd32vf103_it.c **** 
+   3:lib/INTERRUPT/src/gd32vf103_it.c **** #define START_BYTE_ONE      0x01
+   4:lib/INTERRUPT/src/gd32vf103_it.c **** #define START_BYTE_TWO      0xA4
+   5:lib/INTERRUPT/src/gd32vf103_it.c **** #define START_BYTE_LEN      2
+   6:lib/INTERRUPT/src/gd32vf103_it.c **** 
+   7:lib/INTERRUPT/src/gd32vf103_it.c **** #define TEST_CHANNELS        2
+   8:lib/INTERRUPT/src/gd32vf103_it.c **** #define TEST_SAMPLES         20
+   9:lib/INTERRUPT/src/gd32vf103_it.c **** #define TEST_ARRAYSIZE       TEST_CHANNELS * TEST_SAMPLES
+  10:lib/INTERRUPT/src/gd32vf103_it.c **** 
+  11:lib/INTERRUPT/src/gd32vf103_it.c **** #define SPI_SIZE        TEST_ARRAYSIZE * 2 + START_BYTE_LEN // uint16 to byte array
+  12:lib/INTERRUPT/src/gd32vf103_it.c **** 
+  13:lib/INTERRUPT/src/gd32vf103_it.c **** /** SPI sending buffer */
+  14:lib/INTERRUPT/src/gd32vf103_it.c **** uint8_t spi1_send_array[SPI_SIZE];
+  15:lib/INTERRUPT/src/gd32vf103_it.c **** 
+  16:lib/INTERRUPT/src/gd32vf103_it.c **** /** SPI index */
+  17:lib/INTERRUPT/src/gd32vf103_it.c **** uint8_t spi_n = 0;
+  18:lib/INTERRUPT/src/gd32vf103_it.c **** 
+  19:lib/INTERRUPT/src/gd32vf103_it.c **** /** Simulated  values for the SPI */
+  20:lib/INTERRUPT/src/gd32vf103_it.c **** extern const uint16_t test_spi_value_array[];
+  21:lib/INTERRUPT/src/gd32vf103_it.c **** 
+  22:lib/INTERRUPT/src/gd32vf103_it.c **** void add_start_flag(uint8_t *spi_arr, uint8_t *spi_n) {
+  16              		.loc 1 22 55
+  17              		.cfi_startproc
+  18              	.LVL0:
+  23:lib/INTERRUPT/src/gd32vf103_it.c ****     spi_arr[*spi_n] = START_BYTE_ONE;
+  19              		.loc 1 23 5
+  20              		.loc 1 23 13 is_stmt 0
+  21 0000 83C70500 		lbu	a5,0(a1)
+  22              		.loc 1 23 21
+  23 0004 0547     		li	a4,1
+  24 0006 AA97     		add	a5,a0,a5
+  25 0008 2380E700 		sb	a4,0(a5)
+  24:lib/INTERRUPT/src/gd32vf103_it.c ****     (*spi_n)++;
+  26              		.loc 1 24 5 is_stmt 1
+  27              		.loc 1 24 13 is_stmt 0
+  28 000c 83C70500 		lbu	a5,0(a1)
+  29 0010 8507     		addi	a5,a5,1
+  30 0012 93F7F70F 		andi	a5,a5,0xff
+  31 0016 2380F500 		sb	a5,0(a1)
+  25:lib/INTERRUPT/src/gd32vf103_it.c ****     spi_arr[*spi_n] = START_BYTE_TWO;
+  32              		.loc 1 25 5 is_stmt 1
+  33              		.loc 1 25 21 is_stmt 0
+GAS LISTING /tmp/ccf9YW4S.s 			page 2
+
+
+  34 001a 3E95     		add	a0,a0,a5
+  35              	.LVL1:
+  36 001c 930740FA 		li	a5,-92
+  37 0020 2300F500 		sb	a5,0(a0)
+  26:lib/INTERRUPT/src/gd32vf103_it.c ****     (*spi_n)++;
+  38              		.loc 1 26 5 is_stmt 1
+  39              		.loc 1 26 13 is_stmt 0
+  40 0024 83C70500 		lbu	a5,0(a1)
+  41 0028 8507     		addi	a5,a5,1
+  42 002a 2380F500 		sb	a5,0(a1)
+  27:lib/INTERRUPT/src/gd32vf103_it.c **** }
+  43              		.loc 1 27 1
+  44 002e 8280     		ret
+  45              		.cfi_endproc
+  46              	.LFE2:
+  48              		.section	.text.flatten_array,"ax",@progbits
+  49              		.align	1
+  50              		.globl	flatten_array
+  52              	flatten_array:
+  53              	.LFB3:
+  28:lib/INTERRUPT/src/gd32vf103_it.c **** 
+  29:lib/INTERRUPT/src/gd32vf103_it.c **** // assumes dest initialized to twice as large array as src
+  30:lib/INTERRUPT/src/gd32vf103_it.c **** void flatten_array(uint8_t *dest, uint16_t *src, uint8_t start_idx){
+  54              		.loc 1 30 68 is_stmt 1
+  55              		.cfi_startproc
+  56              	.LVL2:
+  31:lib/INTERRUPT/src/gd32vf103_it.c ****     uint8_t n = start_idx;
+  57              		.loc 1 31 5
+  32:lib/INTERRUPT/src/gd32vf103_it.c ****     //for (int i = 0; i < BUFFER_LENGTH; i++){
+  33:lib/INTERRUPT/src/gd32vf103_it.c ****     for (uint8_t i = 0; i < TEST_ARRAYSIZE; i++){
+  58              		.loc 1 33 5
+  59              	.LBB2:
+  60              		.loc 1 33 10
+  61 0000 13070605 		addi	a4,a2,80
+  62 0004 1377F70F 		andi	a4,a4,0xff
+  63              	.LVL3:
+  64              	.L3:
+  65              	.LBB3:
+  34:lib/INTERRUPT/src/gd32vf103_it.c ****         uint8_t hi = src[i] >> 8;
+  66              		.loc 1 34 9 discriminator 3
+  67              		.loc 1 34 25 is_stmt 0 discriminator 3
+  68 0008 83D60500 		lhu	a3,0(a1)
+  69              	.LVL4:
+  35:lib/INTERRUPT/src/gd32vf103_it.c ****         uint8_t lo = (uint8_t) src[i];
+  70              		.loc 1 35 9 is_stmt 1 discriminator 3
+  36:lib/INTERRUPT/src/gd32vf103_it.c ****         dest[n++] = hi;
+  71              		.loc 1 36 9 discriminator 3
+  72              		.loc 1 36 15 is_stmt 0 discriminator 3
+  73 000c 93071600 		addi	a5,a2,1
+  74              		.loc 1 36 19 discriminator 3
+  75 0010 3308C500 		add	a6,a0,a2
+  76              		.loc 1 36 15 discriminator 3
+  77 0014 93F7F70F 		andi	a5,a5,0xff
+  78              	.LVL5:
+  34:lib/INTERRUPT/src/gd32vf103_it.c ****         uint8_t hi = src[i] >> 8;
+  79              		.loc 1 34 17 discriminator 3
+  80 0018 93D88600 		srli	a7,a3,8
+GAS LISTING /tmp/ccf9YW4S.s 			page 3
+
+
+  81 001c 23001801 		sb	a7,0(a6)
+  37:lib/INTERRUPT/src/gd32vf103_it.c ****         dest[n++] = lo;
+  82              		.loc 1 37 9 is_stmt 1 discriminator 3
+  83              		.loc 1 37 15 is_stmt 0 discriminator 3
+  84 0020 0906     		addi	a2,a2,2
+  85              		.loc 1 37 19 discriminator 3
+  86 0022 AA97     		add	a5,a0,a5
+  87              	.LVL6:
+  88              		.loc 1 37 15 discriminator 3
+  89 0024 1376F60F 		andi	a2,a2,0xff
+  90              	.LVL7:
+  35:lib/INTERRUPT/src/gd32vf103_it.c ****         uint8_t lo = (uint8_t) src[i];
+  91              		.loc 1 35 17 discriminator 3
+  92 0028 2380D700 		sb	a3,0(a5)
+  93 002c 8905     		addi	a1,a1,2
+  94              	.LBE3:
+  33:lib/INTERRUPT/src/gd32vf103_it.c ****         uint8_t hi = src[i] >> 8;
+  95              		.loc 1 33 5 discriminator 3
+  96 002e E31DE6FC 		bne	a2,a4,.L3
+  97              	.LBE2:
+  38:lib/INTERRUPT/src/gd32vf103_it.c ****     }   
+  39:lib/INTERRUPT/src/gd32vf103_it.c **** }
+  98              		.loc 1 39 1
+  99 0032 8280     		ret
+ 100              		.cfi_endproc
+ 101              	.LFE3:
+ 103              		.section	.text.SPI1_IRQHandler,"ax",@progbits
+ 104              		.align	1
+ 105              		.globl	SPI1_IRQHandler
+ 107              	SPI1_IRQHandler:
+ 108              	.LFB4:
+  40:lib/INTERRUPT/src/gd32vf103_it.c **** 
+  41:lib/INTERRUPT/src/gd32vf103_it.c **** /*!
+  42:lib/INTERRUPT/src/gd32vf103_it.c ****     \brief      ISR for SPI data transmission
+  43:lib/INTERRUPT/src/gd32vf103_it.c ****     \param      none
+  44:lib/INTERRUPT/src/gd32vf103_it.c ****     \retval     none 
+  45:lib/INTERRUPT/src/gd32vf103_it.c **** */
+  46:lib/INTERRUPT/src/gd32vf103_it.c **** void SPI1_IRQHandler(void){
+ 109              		.loc 1 46 27 is_stmt 1
+ 110              		.cfi_startproc
+  47:lib/INTERRUPT/src/gd32vf103_it.c ****     if (RESET != spi_i2s_interrupt_flag_get(SPI1, SPI_I2S_INT_FLAG_TBE)){
+ 111              		.loc 1 47 5
+ 112              		.loc 1 47 18 is_stmt 0
+ 113 0000 37450040 		li	a0,1073758208
+  46:lib/INTERRUPT/src/gd32vf103_it.c ****     if (RESET != spi_i2s_interrupt_flag_get(SPI1, SPI_I2S_INT_FLAG_TBE)){
+ 114              		.loc 1 46 27
+ 115 0004 4111     		addi	sp,sp,-16
+ 116              	.LCFI0:
+ 117              		.cfi_def_cfa_offset 16
+ 118              		.loc 1 47 18
+ 119 0006 8145     		li	a1,0
+ 120 0008 13050580 		addi	a0,a0,-2048
+  46:lib/INTERRUPT/src/gd32vf103_it.c ****     if (RESET != spi_i2s_interrupt_flag_get(SPI1, SPI_I2S_INT_FLAG_TBE)){
+ 121              		.loc 1 46 27
+ 122 000c 06C6     		sw	ra,12(sp)
+ 123 000e 22C4     		sw	s0,8(sp)
+ 124 0010 26C2     		sw	s1,4(sp)
+GAS LISTING /tmp/ccf9YW4S.s 			page 4
+
+
+ 125              		.cfi_offset 1, -4
+ 126              		.cfi_offset 8, -8
+ 127              		.cfi_offset 9, -12
+ 128              		.loc 1 47 18
+ 129 0012 97000000 		call	spi_i2s_interrupt_flag_get
+ 129      E7800000 
+ 130              	.LVL8:
+ 131              		.loc 1 47 8
+ 132 001a 39C9     		beq	a0,zero,.L5
+  48:lib/INTERRUPT/src/gd32vf103_it.c ****         // TBE interupt is active, verify buffer empty via hardware status bit
+  49:lib/INTERRUPT/src/gd32vf103_it.c ****         while (RESET == spi_i2s_flag_get(SPI1, SPI_FLAG_TBE));
+ 133              		.loc 1 49 25
+ 134 001c B7440040 		li	s1,1073758208
+ 135 0020 13840480 		addi	s0,s1,-2048
+ 136              	.L6:
+ 137              		.loc 1 49 62 is_stmt 1 discriminator 1
+ 138              		.loc 1 49 25 is_stmt 0 discriminator 1
+ 139 0024 8945     		li	a1,2
+ 140 0026 2285     		mv	a0,s0
+ 141 0028 97000000 		call	spi_i2s_flag_get
+ 141      E7800000 
+ 142              	.LVL9:
+ 143              		.loc 1 49 15 discriminator 1
+ 144 0030 75D9     		beq	a0,zero,.L6
+  50:lib/INTERRUPT/src/gd32vf103_it.c ****         
+  51:lib/INTERRUPT/src/gd32vf103_it.c ****         spi_i2s_data_transmit(SPI1, spi1_send_array[spi_n++]);
+ 145              		.loc 1 51 9 is_stmt 1
+ 146              		.loc 1 51 58 is_stmt 0
+ 147 0032 37040000 		lui	s0,%hi(.LANCHOR0)
+ 148 0036 13040400 		addi	s0,s0,%lo(.LANCHOR0)
+ 149 003a 03470400 		lbu	a4,0(s0)
+ 150              		.loc 1 51 9
+ 151 003e 13850480 		addi	a0,s1,-2048
+ 152              		.loc 1 51 58
+ 153 0042 93071700 		addi	a5,a4,1
+ 154 0046 2300F400 		sb	a5,0(s0)
+ 155              		.loc 1 51 52
+ 156 004a B7070000 		lui	a5,%hi(spi1_send_array)
+ 157 004e 93870700 		addi	a5,a5,%lo(spi1_send_array)
+ 158 0052 BA97     		add	a5,a5,a4
+ 159              		.loc 1 51 9
+ 160 0054 83C50700 		lbu	a1,0(a5)
+ 161 0058 97000000 		call	spi_i2s_data_transmit
+ 161      E7800000 
+ 162              	.LVL10:
+  52:lib/INTERRUPT/src/gd32vf103_it.c ****         if (spi_n >= SPI_SIZE) spi_n = 0;
+ 163              		.loc 1 52 9 is_stmt 1
+ 164              		.loc 1 52 12 is_stmt 0
+ 165 0060 03470400 		lbu	a4,0(s0)
+ 166 0064 93071005 		li	a5,81
+ 167 0068 63F4E700 		bleu	a4,a5,.L5
+ 168              		.loc 1 52 32 is_stmt 1 discriminator 1
+ 169              		.loc 1 52 38 is_stmt 0 discriminator 1
+ 170 006c 23000400 		sb	zero,0(s0)
+ 171              	.L5:
+  53:lib/INTERRUPT/src/gd32vf103_it.c ****     }
+  54:lib/INTERRUPT/src/gd32vf103_it.c **** }
+GAS LISTING /tmp/ccf9YW4S.s 			page 5
+
+
+ 172              		.loc 1 54 1
+ 173 0070 B240     		lw	ra,12(sp)
+ 174              		.cfi_restore 1
+ 175 0072 2244     		lw	s0,8(sp)
+ 176              		.cfi_restore 8
+ 177 0074 9244     		lw	s1,4(sp)
+ 178              		.cfi_restore 9
+ 179 0076 4101     		addi	sp,sp,16
+ 180              	.LCFI1:
+ 181              		.cfi_def_cfa_offset 0
+ 182 0078 8280     		jr	ra
+ 183              		.cfi_endproc
+ 184              	.LFE4:
+ 186              		.section	.text.TIMER1_IRQHandler,"ax",@progbits
+ 187              		.align	1
+ 188              		.globl	TIMER1_IRQHandler
+ 190              	TIMER1_IRQHandler:
+ 191              	.LFB5:
+  55:lib/INTERRUPT/src/gd32vf103_it.c **** 
+  56:lib/INTERRUPT/src/gd32vf103_it.c **** void TIMER1_IRQHandler(void) {
+ 192              		.loc 1 56 30 is_stmt 1
+ 193              		.cfi_startproc
+  57:lib/INTERRUPT/src/gd32vf103_it.c ****     if(SET == timer_interrupt_flag_get(TIMER1, TIMER_INT_FLAG_UP)){
+ 194              		.loc 1 57 5
+  56:lib/INTERRUPT/src/gd32vf103_it.c ****     if(SET == timer_interrupt_flag_get(TIMER1, TIMER_INT_FLAG_UP)){
+ 195              		.loc 1 56 30 is_stmt 0
+ 196 0000 4111     		addi	sp,sp,-16
+ 197              	.LCFI2:
+ 198              		.cfi_def_cfa_offset 16
+ 199              		.loc 1 57 15
+ 200 0002 8545     		li	a1,1
+ 201 0004 37050040 		li	a0,1073741824
+  56:lib/INTERRUPT/src/gd32vf103_it.c ****     if(SET == timer_interrupt_flag_get(TIMER1, TIMER_INT_FLAG_UP)){
+ 202              		.loc 1 56 30
+ 203 0008 06C6     		sw	ra,12(sp)
+ 204 000a 22C4     		sw	s0,8(sp)
+ 205 000c 26C2     		sw	s1,4(sp)
+ 206              		.cfi_offset 1, -4
+ 207              		.cfi_offset 8, -8
+ 208              		.cfi_offset 9, -12
+ 209              		.loc 1 57 15
+ 210 000e 97000000 		call	timer_interrupt_flag_get
+ 210      E7800000 
+ 211              	.LVL11:
+ 212              		.loc 1 57 7
+ 213 0016 8547     		li	a5,1
+ 214 0018 631DF506 		bne	a0,a5,.L13
+  58:lib/INTERRUPT/src/gd32vf103_it.c ****         timer_interrupt_flag_clear(TIMER1, TIMER_INT_FLAG_UP);
+ 215              		.loc 1 58 9 is_stmt 1
+ 216 001c 8545     		li	a1,1
+ 217 001e 37050040 		li	a0,1073741824
+ 218 0022 97000000 		call	timer_interrupt_flag_clear
+ 218      E7800000 
+ 219              	.LVL12:
+  59:lib/INTERRUPT/src/gd32vf103_it.c ****         spi_n = 0;
+ 220              		.loc 1 59 9
+  60:lib/INTERRUPT/src/gd32vf103_it.c ****         add_start_flag(spi1_send_array, &spi_n);
+GAS LISTING /tmp/ccf9YW4S.s 			page 6
+
+
+ 221              		.loc 1 60 9 is_stmt 0
+ 222 002a B7040000 		lui	s1,%hi(spi1_send_array)
+  59:lib/INTERRUPT/src/gd32vf103_it.c ****         spi_n = 0;
+ 223              		.loc 1 59 15
+ 224 002e B7050000 		lui	a1,%hi(.LANCHOR0)
+ 225 0032 13840500 		addi	s0,a1,%lo(.LANCHOR0)
+ 226              		.loc 1 60 9
+ 227 0036 13850400 		addi	a0,s1,%lo(spi1_send_array)
+ 228 003a 93850500 		addi	a1,a1,%lo(.LANCHOR0)
+  59:lib/INTERRUPT/src/gd32vf103_it.c ****         spi_n = 0;
+ 229              		.loc 1 59 15
+ 230 003e 23000400 		sb	zero,0(s0)
+ 231              		.loc 1 60 9 is_stmt 1
+ 232 0042 97000000 		call	add_start_flag
+ 232      E7800000 
+ 233              	.LVL13:
+  61:lib/INTERRUPT/src/gd32vf103_it.c ****         flatten_array(spi1_send_array, test_spi_value_array, spi_n);
+ 234              		.loc 1 61 9
+ 235 004a 03460400 		lbu	a2,0(s0)
+ 236 004e B7050000 		lui	a1,%hi(test_spi_value_array)
+ 237 0052 13850400 		addi	a0,s1,%lo(spi1_send_array)
+ 238 0056 93850500 		addi	a1,a1,%lo(test_spi_value_array)
+ 239 005a 97000000 		call	flatten_array
+ 239      E7800000 
+ 240              	.LVL14:
+  62:lib/INTERRUPT/src/gd32vf103_it.c ****         spi_n = 0;
+ 241              		.loc 1 62 9
+ 242              		.loc 1 62 15 is_stmt 0
+ 243 0062 23000400 		sb	zero,0(s0)
+  63:lib/INTERRUPT/src/gd32vf103_it.c ****         gpio_bit_write(GPIOB, GPIO_PIN_0, !gpio_output_bit_get(GPIOB, GPIO_PIN_0)); 
+ 244              		.loc 1 63 9 is_stmt 1
+ 245              		.loc 1 63 44 is_stmt 0
+ 246 0066 37140140 		li	s0,1073811456
+ 247 006a 8545     		li	a1,1
+ 248 006c 130504C0 		addi	a0,s0,-1024
+ 249 0070 97000000 		call	gpio_output_bit_get
+ 249      E7800000 
+ 250              	.LVL15:
+ 251              		.loc 1 63 9
+ 252 0078 13361500 		seqz	a2,a0
+ 253 007c 130504C0 		addi	a0,s0,-1024
+  64:lib/INTERRUPT/src/gd32vf103_it.c ****     }
+  65:lib/INTERRUPT/src/gd32vf103_it.c **** }
+ 254              		.loc 1 65 1
+ 255 0080 2244     		lw	s0,8(sp)
+ 256              		.cfi_remember_state
+ 257              		.cfi_restore 8
+ 258 0082 B240     		lw	ra,12(sp)
+ 259              		.cfi_restore 1
+ 260 0084 9244     		lw	s1,4(sp)
+ 261              		.cfi_restore 9
+  63:lib/INTERRUPT/src/gd32vf103_it.c ****         gpio_bit_write(GPIOB, GPIO_PIN_0, !gpio_output_bit_get(GPIOB, GPIO_PIN_0)); 
+ 262              		.loc 1 63 9
+ 263 0086 8545     		li	a1,1
+ 264              		.loc 1 65 1
+ 265 0088 4101     		addi	sp,sp,16
+ 266              	.LCFI3:
+GAS LISTING /tmp/ccf9YW4S.s 			page 7
+
+
+ 267              		.cfi_def_cfa_offset 0
+  63:lib/INTERRUPT/src/gd32vf103_it.c ****         gpio_bit_write(GPIOB, GPIO_PIN_0, !gpio_output_bit_get(GPIOB, GPIO_PIN_0)); 
+ 268              		.loc 1 63 9
+ 269 008a 17030000 		tail	gpio_bit_write
+ 269      67000300 
+ 270              	.LVL16:
+ 271              	.L13:
+ 272              	.LCFI4:
+ 273              		.cfi_restore_state
+ 274              		.loc 1 65 1
+ 275 0092 B240     		lw	ra,12(sp)
+ 276              		.cfi_restore 1
+ 277 0094 2244     		lw	s0,8(sp)
+ 278              		.cfi_restore 8
+ 279 0096 9244     		lw	s1,4(sp)
+ 280              		.cfi_restore 9
+ 281 0098 4101     		addi	sp,sp,16
+ 282              	.LCFI5:
+ 283              		.cfi_def_cfa_offset 0
+ 284 009a 8280     		jr	ra
+ 285              		.cfi_endproc
+ 286              	.LFE5:
+ 288              		.globl	spi_n
+ 289              		.comm	spi1_send_array,82,4
+ 290              		.section	.sbss.spi_n,"aw",@nobits
+ 291              		.set	.LANCHOR0,. + 0
+ 294              	spi_n:
+ 295 0000 00       		.zero	1
+ 296              		.text
+ 297              	.Letext0:
+ 298              		.file 2 "/home/karzan/Documents/toolchain-gd32v-v202-linux/compiler/riscv64-unknown-elf/include/ma
+ 299              		.file 3 "/home/karzan/Documents/toolchain-gd32v-v202-linux/compiler/riscv64-unknown-elf/include/sy
+ 300              		.file 4 "../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+ 301              		.file 5 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_timer.h"
+ 302              		.file 6 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_gpio.h"
+ 303              		.file 7 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_spi.h"
+ 304              		.file 8 "../../firmware/GD32VF103_standard_peripheral/gd32vf103.h"
+GAS LISTING /tmp/ccf9YW4S.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 gd32vf103_it.c
+     /tmp/ccf9YW4S.s:13     .text.add_start_flag:0000000000000000 add_start_flag
+     /tmp/ccf9YW4S.s:17     .text.add_start_flag:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:19     .text.add_start_flag:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:20     .text.add_start_flag:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:21     .text.add_start_flag:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:23     .text.add_start_flag:0000000000000004 .L0 
+     /tmp/ccf9YW4S.s:27     .text.add_start_flag:000000000000000c .L0 
+     /tmp/ccf9YW4S.s:28     .text.add_start_flag:000000000000000c .L0 
+     /tmp/ccf9YW4S.s:33     .text.add_start_flag:000000000000001a .L0 
+     /tmp/ccf9YW4S.s:34     .text.add_start_flag:000000000000001a .L0 
+     /tmp/ccf9YW4S.s:39     .text.add_start_flag:0000000000000024 .L0 
+     /tmp/ccf9YW4S.s:40     .text.add_start_flag:0000000000000024 .L0 
+     /tmp/ccf9YW4S.s:44     .text.add_start_flag:000000000000002e .L0 
+     /tmp/ccf9YW4S.s:45     .text.add_start_flag:0000000000000030 .L0 
+     /tmp/ccf9YW4S.s:52     .text.flatten_array:0000000000000000 flatten_array
+     /tmp/ccf9YW4S.s:55     .text.flatten_array:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:57     .text.flatten_array:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:58     .text.flatten_array:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:60     .text.flatten_array:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:61     .text.flatten_array:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:67     .text.flatten_array:0000000000000008 .L0 
+     /tmp/ccf9YW4S.s:68     .text.flatten_array:0000000000000008 .L0 
+     /tmp/ccf9YW4S.s:71     .text.flatten_array:000000000000000c .L0 
+     /tmp/ccf9YW4S.s:72     .text.flatten_array:000000000000000c .L0 
+     /tmp/ccf9YW4S.s:73     .text.flatten_array:000000000000000c .L0 
+     /tmp/ccf9YW4S.s:75     .text.flatten_array:0000000000000010 .L0 
+     /tmp/ccf9YW4S.s:77     .text.flatten_array:0000000000000014 .L0 
+     /tmp/ccf9YW4S.s:80     .text.flatten_array:0000000000000018 .L0 
+     /tmp/ccf9YW4S.s:83     .text.flatten_array:0000000000000020 .L0 
+     /tmp/ccf9YW4S.s:84     .text.flatten_array:0000000000000020 .L0 
+     /tmp/ccf9YW4S.s:86     .text.flatten_array:0000000000000022 .L0 
+     /tmp/ccf9YW4S.s:89     .text.flatten_array:0000000000000024 .L0 
+     /tmp/ccf9YW4S.s:92     .text.flatten_array:0000000000000028 .L0 
+     /tmp/ccf9YW4S.s:96     .text.flatten_array:000000000000002e .L0 
+     /tmp/ccf9YW4S.s:99     .text.flatten_array:0000000000000032 .L0 
+     /tmp/ccf9YW4S.s:100    .text.flatten_array:0000000000000034 .L0 
+     /tmp/ccf9YW4S.s:107    .text.SPI1_IRQHandler:0000000000000000 SPI1_IRQHandler
+     /tmp/ccf9YW4S.s:110    .text.SPI1_IRQHandler:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:111    .text.SPI1_IRQHandler:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:112    .text.SPI1_IRQHandler:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:113    .text.SPI1_IRQHandler:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:115    .text.SPI1_IRQHandler:0000000000000004 .L0 
+     /tmp/ccf9YW4S.s:117    .text.SPI1_IRQHandler:0000000000000006 .L0 
+     /tmp/ccf9YW4S.s:119    .text.SPI1_IRQHandler:0000000000000006 .L0 
+     /tmp/ccf9YW4S.s:122    .text.SPI1_IRQHandler:000000000000000c .L0 
+     /tmp/ccf9YW4S.s:125    .text.SPI1_IRQHandler:0000000000000012 .L0 
+     /tmp/ccf9YW4S.s:126    .text.SPI1_IRQHandler:0000000000000012 .L0 
+     /tmp/ccf9YW4S.s:127    .text.SPI1_IRQHandler:0000000000000012 .L0 
+     /tmp/ccf9YW4S.s:129    .text.SPI1_IRQHandler:0000000000000012 .L0 
+     /tmp/ccf9YW4S.s:132    .text.SPI1_IRQHandler:000000000000001a .L0 
+     /tmp/ccf9YW4S.s:134    .text.SPI1_IRQHandler:000000000000001c .L0 
+     /tmp/ccf9YW4S.s:138    .text.SPI1_IRQHandler:0000000000000024 .L0 
+     /tmp/ccf9YW4S.s:139    .text.SPI1_IRQHandler:0000000000000024 .L0 
+     /tmp/ccf9YW4S.s:144    .text.SPI1_IRQHandler:0000000000000030 .L0 
+     /tmp/ccf9YW4S.s:146    .text.SPI1_IRQHandler:0000000000000032 .L0 
+GAS LISTING /tmp/ccf9YW4S.s 			page 9
+
+
+     /tmp/ccf9YW4S.s:147    .text.SPI1_IRQHandler:0000000000000032 .L0 
+     /tmp/ccf9YW4S.s:151    .text.SPI1_IRQHandler:000000000000003e .L0 
+     /tmp/ccf9YW4S.s:153    .text.SPI1_IRQHandler:0000000000000042 .L0 
+                            *COM*:0000000000000052 spi1_send_array
+     /tmp/ccf9YW4S.s:156    .text.SPI1_IRQHandler:000000000000004a .L0 
+     /tmp/ccf9YW4S.s:160    .text.SPI1_IRQHandler:0000000000000054 .L0 
+     /tmp/ccf9YW4S.s:164    .text.SPI1_IRQHandler:0000000000000060 .L0 
+     /tmp/ccf9YW4S.s:165    .text.SPI1_IRQHandler:0000000000000060 .L0 
+     /tmp/ccf9YW4S.s:169    .text.SPI1_IRQHandler:000000000000006c .L0 
+     /tmp/ccf9YW4S.s:170    .text.SPI1_IRQHandler:000000000000006c .L0 
+     /tmp/ccf9YW4S.s:173    .text.SPI1_IRQHandler:0000000000000070 .L0 
+     /tmp/ccf9YW4S.s:174    .text.SPI1_IRQHandler:0000000000000072 .L0 
+     /tmp/ccf9YW4S.s:176    .text.SPI1_IRQHandler:0000000000000074 .L0 
+     /tmp/ccf9YW4S.s:178    .text.SPI1_IRQHandler:0000000000000076 .L0 
+     /tmp/ccf9YW4S.s:181    .text.SPI1_IRQHandler:0000000000000078 .L0 
+     /tmp/ccf9YW4S.s:183    .text.SPI1_IRQHandler:000000000000007a .L0 
+     /tmp/ccf9YW4S.s:190    .text.TIMER1_IRQHandler:0000000000000000 TIMER1_IRQHandler
+     /tmp/ccf9YW4S.s:193    .text.TIMER1_IRQHandler:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:194    .text.TIMER1_IRQHandler:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:195    .text.TIMER1_IRQHandler:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:196    .text.TIMER1_IRQHandler:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:198    .text.TIMER1_IRQHandler:0000000000000002 .L0 
+     /tmp/ccf9YW4S.s:200    .text.TIMER1_IRQHandler:0000000000000002 .L0 
+     /tmp/ccf9YW4S.s:203    .text.TIMER1_IRQHandler:0000000000000008 .L0 
+     /tmp/ccf9YW4S.s:206    .text.TIMER1_IRQHandler:000000000000000e .L0 
+     /tmp/ccf9YW4S.s:207    .text.TIMER1_IRQHandler:000000000000000e .L0 
+     /tmp/ccf9YW4S.s:208    .text.TIMER1_IRQHandler:000000000000000e .L0 
+     /tmp/ccf9YW4S.s:210    .text.TIMER1_IRQHandler:000000000000000e .L0 
+     /tmp/ccf9YW4S.s:213    .text.TIMER1_IRQHandler:0000000000000016 .L0 
+     /tmp/ccf9YW4S.s:216    .text.TIMER1_IRQHandler:000000000000001c .L0 
+     /tmp/ccf9YW4S.s:221    .text.TIMER1_IRQHandler:000000000000002a .L0 
+     /tmp/ccf9YW4S.s:222    .text.TIMER1_IRQHandler:000000000000002a .L0 
+     /tmp/ccf9YW4S.s:224    .text.TIMER1_IRQHandler:000000000000002e .L0 
+     /tmp/ccf9YW4S.s:227    .text.TIMER1_IRQHandler:0000000000000036 .L0 
+     /tmp/ccf9YW4S.s:230    .text.TIMER1_IRQHandler:000000000000003e .L0 
+     /tmp/ccf9YW4S.s:232    .text.TIMER1_IRQHandler:0000000000000042 .L0 
+     /tmp/ccf9YW4S.s:235    .text.TIMER1_IRQHandler:000000000000004a .L0 
+     /tmp/ccf9YW4S.s:242    .text.TIMER1_IRQHandler:0000000000000062 .L0 
+     /tmp/ccf9YW4S.s:243    .text.TIMER1_IRQHandler:0000000000000062 .L0 
+     /tmp/ccf9YW4S.s:245    .text.TIMER1_IRQHandler:0000000000000066 .L0 
+     /tmp/ccf9YW4S.s:246    .text.TIMER1_IRQHandler:0000000000000066 .L0 
+     /tmp/ccf9YW4S.s:252    .text.TIMER1_IRQHandler:0000000000000078 .L0 
+     /tmp/ccf9YW4S.s:255    .text.TIMER1_IRQHandler:0000000000000080 .L0 
+     /tmp/ccf9YW4S.s:256    .text.TIMER1_IRQHandler:0000000000000082 .L0 
+     /tmp/ccf9YW4S.s:257    .text.TIMER1_IRQHandler:0000000000000082 .L0 
+     /tmp/ccf9YW4S.s:259    .text.TIMER1_IRQHandler:0000000000000084 .L0 
+     /tmp/ccf9YW4S.s:261    .text.TIMER1_IRQHandler:0000000000000086 .L0 
+     /tmp/ccf9YW4S.s:263    .text.TIMER1_IRQHandler:0000000000000086 .L0 
+     /tmp/ccf9YW4S.s:265    .text.TIMER1_IRQHandler:0000000000000088 .L0 
+     /tmp/ccf9YW4S.s:267    .text.TIMER1_IRQHandler:000000000000008a .L0 
+     /tmp/ccf9YW4S.s:269    .text.TIMER1_IRQHandler:000000000000008a .L0 
+     /tmp/ccf9YW4S.s:273    .text.TIMER1_IRQHandler:0000000000000092 .L0 
+     /tmp/ccf9YW4S.s:275    .text.TIMER1_IRQHandler:0000000000000092 .L0 
+     /tmp/ccf9YW4S.s:276    .text.TIMER1_IRQHandler:0000000000000094 .L0 
+     /tmp/ccf9YW4S.s:278    .text.TIMER1_IRQHandler:0000000000000096 .L0 
+     /tmp/ccf9YW4S.s:280    .text.TIMER1_IRQHandler:0000000000000098 .L0 
+     /tmp/ccf9YW4S.s:283    .text.TIMER1_IRQHandler:000000000000009a .L0 
+GAS LISTING /tmp/ccf9YW4S.s 			page 10
+
+
+     /tmp/ccf9YW4S.s:285    .text.TIMER1_IRQHandler:000000000000009c .L0 
+     /tmp/ccf9YW4S.s:294    .sbss.spi_n:0000000000000000 spi_n
+     /tmp/ccf9YW4S.s:291    .sbss.spi_n:0000000000000000 .LANCHOR0
+     /tmp/ccf9YW4S.s:48     .text.add_start_flag:0000000000000030 .L0 
+     /tmp/ccf9YW4S.s:103    .text.flatten_array:0000000000000034 .L0 
+     /tmp/ccf9YW4S.s:186    .text.SPI1_IRQHandler:000000000000007a .L0 
+     /tmp/ccf9YW4S.s:290    .text.TIMER1_IRQHandler:000000000000009c .L0 
+                     .debug_frame:0000000000000000 .L0 
+     /tmp/ccf9YW4S.s:64     .text.flatten_array:0000000000000008 .L3
+     /tmp/ccf9YW4S.s:171    .text.SPI1_IRQHandler:0000000000000070 .L5
+     /tmp/ccf9YW4S.s:136    .text.SPI1_IRQHandler:0000000000000024 .L6
+     /tmp/ccf9YW4S.s:271    .text.TIMER1_IRQHandler:0000000000000092 .L13
+     /tmp/ccf9YW4S.s:802    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccf9YW4S.s:1397   .debug_str:0000000000000209 .LASF35
+     /tmp/ccf9YW4S.s:1373   .debug_str:0000000000000144 .LASF36
+     /tmp/ccf9YW4S.s:1361   .debug_str:00000000000000bb .LASF37
+     /tmp/ccf9YW4S.s:1321   .debug_ranges:0000000000000000 .Ldebug_ranges0
+     /tmp/ccf9YW4S.s:1333   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccf9YW4S.s:1375   .debug_str:0000000000000165 .LASF0
+     /tmp/ccf9YW4S.s:1405   .debug_str:00000000000002c1 .LASF1
+     /tmp/ccf9YW4S.s:1337   .debug_str:0000000000000016 .LASF4
+     /tmp/ccf9YW4S.s:1365   .debug_str:0000000000000116 .LASF2
+     /tmp/ccf9YW4S.s:1391   .debug_str:00000000000001e1 .LASF3
+     /tmp/ccf9YW4S.s:1367   .debug_str:0000000000000124 .LASF5
+     /tmp/ccf9YW4S.s:1343   .debug_str:0000000000000042 .LASF6
+     /tmp/ccf9YW4S.s:1341   .debug_str:0000000000000039 .LASF7
+     /tmp/ccf9YW4S.s:1369   .debug_str:000000000000012f .LASF8
+     /tmp/ccf9YW4S.s:1357   .debug_str:00000000000000a3 .LASF9
+     /tmp/ccf9YW4S.s:1387   .debug_str:00000000000001c3 .LASF10
+     /tmp/ccf9YW4S.s:1377   .debug_str:0000000000000172 .LASF11
+     /tmp/ccf9YW4S.s:1379   .debug_str:0000000000000189 .LASF12
+     /tmp/ccf9YW4S.s:1393   .debug_str:00000000000001eb .LASF13
+     /tmp/ccf9YW4S.s:1399   .debug_str:0000000000000291 .LASF14
+     /tmp/ccf9YW4S.s:1389   .debug_str:00000000000001d1 .LASF17
+     /tmp/ccf9YW4S.s:1359   .debug_str:00000000000000b5 .LASF15
+     /tmp/ccf9YW4S.s:1403   .debug_str:00000000000002b5 .LASF16
+     /tmp/ccf9YW4S.s:1363   .debug_str:0000000000000106 .LASF18
+     /tmp/ccf9YW4S.s:1409   .debug_str:00000000000002e8 .LASF19
+     /tmp/ccf9YW4S.s:1395   .debug_str:00000000000001f4 .LASF20
+     /tmp/ccf9YW4S.s:1351   .debug_str:0000000000000073 .LASF21
+     /tmp/ccf9YW4S.s:191    .text.TIMER1_IRQHandler:0000000000000000 .LFB5
+     /tmp/ccf9YW4S.s:286    .text.TIMER1_IRQHandler:000000000000009c .LFE5
+     /tmp/ccf9YW4S.s:1185   .debug_loc:0000000000000000 .LLST6
+     /tmp/ccf9YW4S.s:211    .text.TIMER1_IRQHandler:0000000000000016 .LVL11
+     /tmp/ccf9YW4S.s:219    .text.TIMER1_IRQHandler:000000000000002a .LVL12
+     /tmp/ccf9YW4S.s:233    .text.TIMER1_IRQHandler:000000000000004a .LVL13
+     /tmp/ccf9YW4S.s:240    .text.TIMER1_IRQHandler:0000000000000062 .LVL14
+     /tmp/ccf9YW4S.s:250    .text.TIMER1_IRQHandler:0000000000000078 .LVL15
+     /tmp/ccf9YW4S.s:270    .text.TIMER1_IRQHandler:0000000000000092 .LVL16
+     /tmp/ccf9YW4S.s:1385   .debug_str:00000000000001b3 .LASF22
+     /tmp/ccf9YW4S.s:108    .text.SPI1_IRQHandler:0000000000000000 .LFB4
+     /tmp/ccf9YW4S.s:184    .text.SPI1_IRQHandler:000000000000007a .LFE4
+     /tmp/ccf9YW4S.s:1213   .debug_loc:0000000000000044 .LLST5
+     /tmp/ccf9YW4S.s:130    .text.SPI1_IRQHandler:000000000000001a .LVL8
+     /tmp/ccf9YW4S.s:142    .text.SPI1_IRQHandler:0000000000000030 .LVL9
+     /tmp/ccf9YW4S.s:162    .text.SPI1_IRQHandler:0000000000000060 .LVL10
+     /tmp/ccf9YW4S.s:1383   .debug_str:00000000000001a5 .LASF23
+GAS LISTING /tmp/ccf9YW4S.s 			page 11
+
+
+     /tmp/ccf9YW4S.s:53     .text.flatten_array:0000000000000000 .LFB3
+     /tmp/ccf9YW4S.s:101    .text.flatten_array:0000000000000034 .LFE3
+     /tmp/ccf9YW4S.s:1349   .debug_str:000000000000006e .LASF24
+     /tmp/ccf9YW4S.s:1231   .debug_loc:0000000000000070 .LLST1
+     /tmp/ccf9YW4S.s:1371   .debug_str:000000000000013a .LASF25
+     /tmp/ccf9YW4S.s:1245   .debug_loc:0000000000000091 .LLST2
+     /tmp/ccf9YW4S.s:1259   .debug_loc:00000000000000b2 .LLST3
+     /tmp/ccf9YW4S.s:59     .text.flatten_array:0000000000000000 .LBB2
+     /tmp/ccf9YW4S.s:97     .text.flatten_array:0000000000000032 .LBE2
+     /tmp/ccf9YW4S.s:1280   .debug_loc:00000000000000e8 .LLST4
+     /tmp/ccf9YW4S.s:65     .text.flatten_array:0000000000000008 .LBB3
+     /tmp/ccf9YW4S.s:94     .text.flatten_array:000000000000002e .LBE3
+     /tmp/ccf9YW4S.s:1355   .debug_str:0000000000000094 .LASF26
+     /tmp/ccf9YW4S.s:14     .text.add_start_flag:0000000000000000 .LFB2
+     /tmp/ccf9YW4S.s:46     .text.add_start_flag:0000000000000030 .LFE2
+     /tmp/ccf9YW4S.s:1345   .debug_str:0000000000000055 .LASF27
+     /tmp/ccf9YW4S.s:1288   .debug_loc:00000000000000fc .LLST0
+     /tmp/ccf9YW4S.s:1339   .debug_str:0000000000000020 .LASF28
+     /tmp/ccf9YW4S.s:1401   .debug_str:000000000000029a .LASF29
+     /tmp/ccf9YW4S.s:1381   .debug_str:0000000000000191 .LASF30
+     /tmp/ccf9YW4S.s:1353   .debug_str:0000000000000085 .LASF31
+     /tmp/ccf9YW4S.s:1407   .debug_str:00000000000002cd .LASF32
+     /tmp/ccf9YW4S.s:1347   .debug_str:000000000000005d .LASF33
+     /tmp/ccf9YW4S.s:1335   .debug_str:0000000000000000 .LASF34
+     /tmp/ccf9YW4S.s:197    .text.TIMER1_IRQHandler:0000000000000002 .LCFI2
+     /tmp/ccf9YW4S.s:266    .text.TIMER1_IRQHandler:000000000000008a .LCFI3
+     /tmp/ccf9YW4S.s:272    .text.TIMER1_IRQHandler:0000000000000092 .LCFI4
+     /tmp/ccf9YW4S.s:282    .text.TIMER1_IRQHandler:000000000000009a .LCFI5
+     /tmp/ccf9YW4S.s:116    .text.SPI1_IRQHandler:0000000000000006 .LCFI0
+     /tmp/ccf9YW4S.s:180    .text.SPI1_IRQHandler:0000000000000078 .LCFI1
+     /tmp/ccf9YW4S.s:56     .text.flatten_array:0000000000000000 .LVL2
+     /tmp/ccf9YW4S.s:63     .text.flatten_array:0000000000000008 .LVL3
+     /tmp/ccf9YW4S.s:78     .text.flatten_array:0000000000000018 .LVL5
+     /tmp/ccf9YW4S.s:87     .text.flatten_array:0000000000000024 .LVL6
+     /tmp/ccf9YW4S.s:90     .text.flatten_array:0000000000000028 .LVL7
+     /tmp/ccf9YW4S.s:18     .text.add_start_flag:0000000000000000 .LVL0
+     /tmp/ccf9YW4S.s:35     .text.add_start_flag:000000000000001c .LVL1
+     /tmp/ccf9YW4S.s:306    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+spi_i2s_interrupt_flag_get
+spi_i2s_flag_get
+spi_i2s_data_transmit
+timer_interrupt_flag_get
+timer_interrupt_flag_clear
+test_spi_value_array
+gpio_output_bit_get
+gpio_bit_write
