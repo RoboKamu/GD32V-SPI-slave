@@ -34,4 +34,18 @@ ch1: 0x0FEC 0x0FED 0x0FEE 0x0FEF 0x0FF0 0x0FF1 0x0FF2 0x0FF3 0x0FF4 0x0FF5 0x0FF
 ch2: 0x0FEC 0x0FED 0x0FEE 0x0FEF 0x0FF0 0x0FF1 0x0FF2 0x0FF3 0x0FF4 0x0FF5 0x0FF6 0x0FF7 0x0FF8 0x0FF9 0x0FFA 0x0FFB 0x0FFC 0x0FFD 0x0FFE 0x0FFF
 ```
 
-The results looked promising and reliable. However, at higher speeds the longan nano tends to drop some values during transmission. 
+The results looked promising and reliable. 
+
+~~However, at higher speeds the longan nano tends to drop some values during transmission.~~
+
+In the callback function for the GPIO on the Raspberry Pi, instantly requesting SPI data is a mistake. According to the GD32VF103 user manual in SPI transmission sequence segment, the SPI needs to load the data frame from the data buffer to the shift register.
+
+With the added `time.sleep(0.001)` before requesting SPI data ensured data integrity. 
+
+I ran a test where i had 100 samples on a 20 ms period for 5 channels in scan mode, so transmitting 500 real 16 bit ADC data every 20 ms. I configured the MCU max SPI clock speed to arond 3.3 MHz with the prescaler set to 16 and the RPi SPI clock to 3 MHz. 
+
+The time it took to process the data on the RPi, as well as dividing it into respective channel with the most significant nibble, was less than 9 ms with no data loss. 
+
+This concludes a successful test, an implementation of this will present on my TaylorMade repository.
+
+

@@ -40,6 +40,7 @@ def add_channel_data(ch1, ch2, ch3, ch4, ch5, val):
             pass 
 
 def cbf_gpio(gpio, level, tick):
+    time.sleep(0.001)   # wait 1 ms for SPI 
     print("GPIO {} is {}".format(gpio, level))
     
     # duplex read SPI (8 bit words)
@@ -50,9 +51,9 @@ def cbf_gpio(gpio, level, tick):
     if (sync_idx == -1):
         print("sync not found, discard... " )
         return
-    de = deque(raw_bytes)
-    de.rotate(-sync_idx)
-    data = list(de)
+
+    data = deque(raw_bytes)
+    data.rotate(-sync_idx)
 
     # reconstruct to 16 bits integers
     result = [data[i] << 8 | data[i+1] for i in range(0, len(data), 2)]
