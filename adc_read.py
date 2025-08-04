@@ -28,19 +28,19 @@ def add_channel_data(ch1, ch2, ch3, ch4, ch5, val):
             ch1.append(val & 0x0FFF)
         case 2:
             ch2.append(val & 0x0FFF)
-#        case 3:
-#            ch3.append(val & 0x0FFF)
-#        case 4:
-#            ch4.append(val & 0x0FFF)
-#        case 5:
-#            ch5.append(val & 0x0FFF)
+        case 3:
+            ch3.append(val & 0x0FFF)
+        case 4:
+            ch4.append(val & 0x0FFF)
+        case 5:
+            ch5.append(val & 0x0FFF)
         case _:
             print("DBG --> HERE WEIRD NIBBLE: {}, val: {} = {}\n".format(val>>12, hex(val), val))
             time.sleep(1)
             pass 
 
 def cbf_gpio(gpio, level, tick):
-    time.sleep(0.001)   # wait 1 ms for SPI 
+    time.sleep(0.00005)   # wait 5 us for SPI 
     print("GPIO {} is {}".format(gpio, level))
     
     # duplex read SPI (8 bit words)
